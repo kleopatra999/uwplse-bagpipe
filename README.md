@@ -1,18 +1,22 @@
-Project only the BGP relevant parts of the Juniper configurations with:
+The directions below assume you have the input Juniper configurations in a directory named "configs/"
 
-    cabal run project internet2/*.conf
+- Project only the BGP relevant parts of the Juniper configurations with:
 
-Infer the topology and plot it using dot with:
+    $ bagpipe project configs/*
 
-    cabal run infer topology internet2/*.conf > out.dot
-    circo -Tpdf out.dot > out.pdf
-    open out.pdf
+- Infer the topology:
 
-Infer contracts with:
+    $ bagpipe infer topology configs/* > out.dot
 
-    cabal run infer contracts internet2/*.conf
+  and plot it using dot (requires graphviz to be installed) with:
 
-Inject new commands into the existing configurations with:
+    $ circo -Tpdf out.dot > out.pdf
 
-    cabal run inject add internet2/seat.conf "protocols bgp neighbor a.b.c.d {}" "protocols bgp neighbor a.b.c.d local-preference 400 ;"
+- Infer contracts with:
+
+    $ bagpipe infer contracts configs/*
+
+- Inject new commands into the existing configurations with:
+
+    $ bagpipe inject add configs/foo.conf  "protocols bgp neighbor a.b.c.d {}" "protocols bgp neighbor a.b.c.d local-preference 400 ;"
 
