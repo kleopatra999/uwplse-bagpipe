@@ -1,22 +1,29 @@
-The directions below assume you have the input Juniper configurations in a directory named "configs/"
+Build and install bagpipe:
 
-- Project only the BGP relevant parts of the Juniper configurations with:
+	$ make
 
-    $ bagpipe project configs/*
+Below use example Juniper configurations from
+[Internet2](https://noc.net.internet2.edu/i2network/index.html) which are
+in the `i2/` directory of this repo.
 
-- Infer the topology:
+Project BGP relevant parts of a set of Juniper configurations:
 
-    $ bagpipe infer topology configs/* > out.dot
+    $ bagpipe project i2/*.conf
 
-  and plot it using dot (requires graphviz to be installed) with:
+Generate visualization of network topology from a set of Juniper configurations:
 
-    $ circo -Tpdf out.dot > out.pdf
+    $ bagpipe infer topology i2/*.conf > topo.dot
 
-- Infer contracts with:
+    $ circo -Tpdf topo.dot > topo.pdf
 
-    $ bagpipe infer contracts configs/*
+    $ evince topo.pdf
 
-- Inject new commands into the existing configurations with:
+Infer high level contracts:
 
-    $ bagpipe inject add configs/foo.conf  "protocols bgp neighbor a.b.c.d {}" "protocols bgp neighbor a.b.c.d local-preference 400 ;"
+    $ bagpipe infer contracts i2/*.conf
 
+Inject new commands into existing configurations:
+
+    $ bagpipe inject add i2/seat.conf \
+        "protocols bgp neighbor a.b.c.d {}" \
+        "protocols bgp neighbor a.b.c.d local-preference 400 ;"
